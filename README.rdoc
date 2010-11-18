@@ -382,17 +382,14 @@ the model has been committed to the database)
 
 If your form_for tag looks like:
   <% form_for :person, :url=>{:action=>:stuff} do |f| %>
-then you will always see an on_post callback.
-
-However, if your form_for tag looks like:
+then you will always see an on_post callback. However, if your form_for tag looks like:
   <% form_for @person, :url=>{:action=>:stuff} do |f| %>
 then you will see an on_put callback. This is because
 (a) Rails treats editing an existing object as a PUT request, and,
 (b) Wizardly creates objects right away, so you're almost always editing an existing object
 
 The reason you would use @person instead of :person is so you can use
-accepts_nested_attributes_for with related objects. See:
-  http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-fields_for
+accepts_nested_attributes_for with related objects. See: http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-fields_for
   
 ==== Nested attributes example with wizardly
 
