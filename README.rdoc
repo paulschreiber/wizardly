@@ -308,8 +308,9 @@ Here's the list of action callbacks macros that the developer can use for any ac
   on_finish(:step)      # called when the :finish button is pressed for a valid form (post only)
 
   on_post(:step)        # called at the beginning of a POST request
+  on_put(:step)         # called at the beginning of a PUT request
   on_get(:step)         # called before rendering a GET request
-  on_errors(:step)      # called before re-rendering the form after form invalidation (on a POST request)
+  on_errors(:step)      # called before re-rendering the form after form invalidation (on a POST/PUT request)
 
 The first five callbacks are related to the wizard buttons.  Each
 callback gives the developer a chance to intervene before the impending render or 
@@ -357,7 +358,7 @@ presented to the user with a selection of fields and
 wizard buttons for posting the form.  
 
 When the form data is returned by a POST request, the action creates the instance
-variables and builds the model instance using the form data.  The on_post callback
+variables and builds the model instance using the form data.  The on_post or on_put callback
 is called at the beginning of the post, then the wizard checks for back, skip and 
 cancel buttons.  If neither of those buttons were pressed, it proceeds to validate
 the form, calling the on_errors callback if form validation fails, re-rendering and
@@ -369,13 +370,39 @@ the model has been committed to the database)
 
   #POST request callback order
 
-  on_post
+  on_post (on_put)
   on_back, on_skip, on_cancel
   on_errors
     render_wizard_form   # only if errors
   on_next
   on_finish
     on_completed   # only if completed
+    
+==== The different between on_post and on_put
+
+If your form_for tag looks like:
+  <% form_for :person, :url=>{:action=>:stuff} do |f| %>
+then you will always see an on_post callback.
+
+However, if your form_for tag looks like:
+  <% form_for @person, :url=>{:action=>:stuff} do |f| %>
+then you will see an on_put callback. This is because
+(a) Rails treats editing an existing object as a PUT request, and,
+(b) Wizardly creates objects right away, so you're almost always editing an existing object
+
+The reason you would use @person instead of :person is so you can use
+accepts_nested_attributes_for with related objects. See:
+  http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-fields_for
+  
+==== Nested attributes example with wizardly
+
+  <% form_for @person, :url=>{:action=>:stuff} do |f| %>
+  	<%- f.fields_for :majors do |m| -%>
+  		<%= m.text_field :name %>
+  	<%- end -%>
+  <% end %>
+  
+
 
 ==== Rendering with on_get and on_errors
 
@@ -397,14 +424,14 @@ callbacks are a good place to declare extra variables needed to render the form.
 If you have a variable that goes in every page, render_wizard_form is called
 for every page.
 
-==== Modifying form data with on_post
+==== Modifying form data with on_post (on_put)
 
-The on_post callback is the first callback in the chain of a POST request and 
+The on_post or on_put callback is the first callback in the chain of a POST request and 
 is a good place to modify form input such as adding capitalization to a form.
 Modification should happen through the model instance variable and not the 
 controller's params variable.
 
-Redirecting and rendering are not allowed in the on_post callback.  Doing so will
+Redirecting and rendering are not allowed in the on_post and on_put callbacks.  Doing so will
 raise an error.
 
 ==== Modifying Flow with on_next

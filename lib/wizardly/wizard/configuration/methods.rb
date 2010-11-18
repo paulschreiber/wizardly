@@ -5,6 +5,7 @@ module Wizardly
       def print_callback_macros
         macros = [ 
           %w(on_post _on_post_%s_form),
+          %w(on_put _on_put_%s_form),
           %w(on_get _on_get_%s_form),
           %w(on_errors _on_invalid_%s_form)
         ]
@@ -96,6 +97,9 @@ EVENTS
       _build_wizard_model
       if request.post? && callback_performs_action?(:_on_post_#{id}_form)
         raise CallbackError, "render or redirect not allowed in :on_post(:#{id}) callback", caller
+      end
+      if request.put? && callback_performs_action?(:_on_put_#{id}_form)
+        raise CallbackError, "render or redirect not allowed in :on_put(:#{id}) callback", caller
       end
       button_id = check_action_for_button
       return if performed?

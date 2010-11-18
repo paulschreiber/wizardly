@@ -14,7 +14,7 @@ require 'fileutils'
 
 spec = Gem::Specification.new do |s|
   s.name = 'wizardly'
-  s.version = '0.1.8.9'
+  s.version = '0.1.9'
   s.platform = Gem::Platform::RUBY
   s.description = 'Create wizards from any model in three steps'
   s.summary = 'Produces controllers and wizard scaffolding for models with validation_groups'
@@ -29,9 +29,9 @@ spec = Gem::Specification.new do |s|
   s.has_rdoc = true
   #s.test_files = Dir['spec/*_spec.rb']
 
-  s.author = 'Jeff Patmon'
-  s.email = 'jpatmon@yahoo.com'
-  s.homepage = 'http://github.com/jeffp/wizardly/tree/master'
+  s.author = 'Paul Schreiber'
+  s.email = 'paulschreiber@gmail.com'
+  s.homepage = 'http://github.com/paulschreiber/wizardly/'
 end
 
 require 'spec/version'

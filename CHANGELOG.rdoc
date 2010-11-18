@@ -31,3 +31,6 @@
 * README.rdoc initial version
 * gem version 0.1.0
 
+*  0.1.9/2010-11-18
+
+* added on_put callbacks
