@@ -294,6 +294,16 @@ SANDBOX
       h = self.wizard_form_data
       if (h && model_id = h['id'])
           _model = #{self.model_class_name}.find(model_id)
+          ## PJS: 2010-09-10
+          ## Hack so that relationships with accepts_nested_attributes_for will work with wizardly
+          _model.class.reflect_on_all_associations(:has_many).each do |a|
+            _model.send(a.name).to_s
+          end
+          ## PJS: 2010-11-17
+          ## Added HABTM associations
+          _model.class.reflect_on_all_associations(:has_and_belongs_many).each do |a|
+            _model.send(a.name).to_s
+          end
           _model.attributes = params[:#{self.model}]||{}
           @#{self.model} = _model
           return
