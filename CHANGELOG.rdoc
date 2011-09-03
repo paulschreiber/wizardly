@@ -40,3 +40,7 @@
 * fixed deprecation warnings on #returning calls (thanks, Aaron Todd)
 * added support for accepts_nested_attributes_for
 
+
+*  0.1.11/2011-09-03
+
+* added suppress_duplicate_warnings_for option

@@ -8,7 +8,7 @@ module Wizardly
   module Wizard
     class Configuration
       include TextHelpers
-      attr_reader :pages, :completed_redirect, :canceled_redirect, :controller_path, :controller_class_name, :controller_name, :page_order
+      attr_reader :pages, :completed_redirect, :canceled_redirect, :controller_path, :controller_class_name, :controller_name, :page_order, :suppress_duplicate_warnings_for
       
       #enum_attr :persistance, %w(sandbox session database)
 
@@ -22,6 +22,7 @@ module Wizardly
         @include_skip_button = opts[:skip] || opts[:allow_skip] || opts[:allow_skipping] || false
         @include_cancel_button = opts.key?(:cancel) ? opts[:cancel] : true
         @guard_entry = opts.key?(:guard) ? opts[:guard] : true
+        @suppress_duplicate_warnings_for = opts.key?(:suppress_duplicate_warnings_for) ? opts[:suppress_duplicate_warnings_for] : []
         @password_fields = opts[:mask_fields] || opts[:mask_passwords] || [:password, :password_confirmation]
         @persist_model = opts[:persist_model] || :per_page
         @form_data = opts[:form_data] || :session
@@ -40,7 +41,7 @@ module Wizardly
       def model_instance_variable; "@#{@wizard_model_sym.to_s}"; end
       def model_class_name; @wizard_model_class_name; end
       def model_const; @wizard_model_const; end
-
+      
       def first_page?(name); @page_order.first == name; end
       def last_page?(name); @page_order.last == name; end
       def next_page(name)

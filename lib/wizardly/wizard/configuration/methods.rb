@@ -147,7 +147,22 @@ EVENTS
         
         mb << <<-ENSURE
     ensure
-      _preserve_wizard_model
+      begin
+        _preserve_wizard_model
+      ##
+      ## If @suppress_duplicate_warnings_for is set, you can suppress
+      ## warnings caused by a unique key violation
+      rescue ActiveRecord::StatementInvalid => e
+        matched = false
+        if !wizard_config.suppress_duplicate_warnings_for.empty? and e.to_s =~ /Mysql2?::Error: Duplicate/
+          wizard_config.suppress_duplicate_warnings_for.each do |field|
+            if e.to_s =~ /index_#{self.model.to_s.pluralize}_on_\#{field}/
+              matched = true
+            end
+          end # each
+        end
+        raise e if matched == false
+      end
     end
   end        
 ENSURE
