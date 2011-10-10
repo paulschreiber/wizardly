@@ -349,7 +349,7 @@ To prevent crashes, list the columns with unique key constrainst on them. For ex
 
   :suppress_duplicate_warnings_for => [:foo, :bar]
 
-Note that this will not work if you have a nonstandard table or index name.
+Note that this will not work if you have a nonstandard table or index name. This requires MySQL 5.1 or newer (5.0.xx and older use ER_DUP_ENTRY instead of ER_DUP_ENTRY_WITH_KEY_NAME).
 
 ==== The Wizard's Action Request Cycle
 
