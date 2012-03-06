@@ -44,3 +44,7 @@
 *  0.1.11/2011-09-03
 
 * added suppress_duplicate_warnings_for option
+
+*  0.1.12/2012-03-06
+
+* suppress_duplicate_warnings_for now takes a hash of {:table => :column}

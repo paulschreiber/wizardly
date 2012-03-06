@@ -155,8 +155,8 @@ EVENTS
       rescue ActiveRecord::StatementInvalid => e
         matched = false
         if !wizard_config.suppress_duplicate_warnings_for.empty? and e.to_s =~ /Mysql2?::Error: Duplicate/
-          wizard_config.suppress_duplicate_warnings_for.each do |field|
-            if e.to_s =~ /index_#{self.model.to_s.pluralize}_on_\#{field}/
+          wizard_config.suppress_duplicate_warnings_for.each_pair do |table, column|
+            if e.to_s =~ /index_\#{table}_on_\#{column}/
               matched = true
             end
           end # each
